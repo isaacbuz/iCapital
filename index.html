@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iCapital Identity Integration - Parallel Markets SDK</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .info-section {
+            background-color: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .info-section h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .parallel-login-button {
+            display: inline-block;
+        }
+        .status {
+            margin-top: 30px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .status.success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            display: block;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            display: block;
+        }
+        .status.loading {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            display: block;
+        }
+        .console-info {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        .credentials-form {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #495057;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>iCapital Identity Integration</h1>
+        <p class="subtitle">Parallel Markets SDK Demo - Solutions Engineer Challenge</p>
+        
+        <div class="info-section">
+            <h3>Integration Overview</h3>
+            <p>This page demonstrates a basic integration with the Parallel Markets JavaScript SDK for collecting identity information.</p>
+            <p><strong>Environment:</strong> Sandbox (demo.parallelmarkets.com)</p>
+        </div>
+
+        <div class="credentials-form">
+            <h3>Configure Your Credentials</h3>
+            <p>Enter the Client ID from your Parallel dashboard:</p>
+            <div class="form-group">
+                <label for="clientId">Client ID:</label>
+                <input type="text" id="clientId" placeholder="Enter your client_id" value="A4VMxJXV0MvQLdNShoaRt" />
+            </div>
+            <button onclick="initializeSDK()">Initialize SDK</button>
+        </div>
+
+        <div class="button-container">
+            <h3>Start Identity Verification</h3>
+            <p>Click the button below to open the Parallel overlay:</p>
+            <div class="parallel-login-button"></div>
+        </div>
+
+
+        <div id="status" class="status"></div>
+
+        <div class="console-info">
+            <strong>📝 Note:</strong> Open your browser's Developer Console (F12) to see the full identity results after successful submission.
+        </div>
+    </div>
+
+    <!-- Parallel Markets SDK -->
+    <script src="https://app.parallelmarkets.com/sdk/v2/parallel.js"></script>
+    
+    <script>
+        let isInitialized = false;
+        let currentParallelId = null;
+
+        // Initialize SDK with user-provided credentials
+        function initializeSDK() {
+            const clientId = document.getElementById('clientId').value.trim() || 'A4VMxJXV0MvQLdNShoaRt'; // Your actual client_id
+            
+            if (!clientId) {
+                showStatus('Please enter your Client ID', 'error');
+                return;
+            }
+
+            try {
+                // Initialize Parallel SDK with scopes (as shown in official examples)
+                Parallel.init({
+                    client_id: clientId,
+                    environment: 'demo', // Using sandbox environment
+                    flow_type: 'overlay',
+                    scopes: ['profile', 'accreditation_status'] // Added scopes from official example
+                });
+
+                // Subscribe to button events
+                Parallel.subscribeWithButton(
+                    handleSuccess,
+                    handleError
+                );
+
+                isInitialized = true;
+                showStatus('SDK initialized successfully! You can now use the Parallel button.', 'success');
+                
+                console.log('✅ Parallel SDK initialized with client_id:', clientId);
+                console.log('Environment: demo (sandbox)');
+                console.log('Scopes:', ['profile', 'accreditation_status']);
+                
+            } catch (error) {
+                showStatus('Failed to initialize SDK: ' + error.message, 'error');
+                console.error('SDK initialization error:', error);
+            }
+        }
+
+        // Handle successful identity submission
+        async function handleSuccess(result) {
+            showStatus('Identity information submitted successfully! Fetching details...', 'loading');
+            
+            console.log('✅ Identity submission successful!');
+            console.log('Full authentication response:', result);
+            
+            // Extract authResponse as shown in official examples
+            if (result.authResponse) {
+                console.log('Authentication Response Parameters:');
+                Object.entries(result.authResponse).forEach(([key, value]) => {
+                    console.log(`  ${key}:`, value);
+                });
+                
+                currentParallelId = result.authResponse.parallel_id || result.authResponse.id;
+            }
+            
+            // Get profile using SDK method (as shown in official examples)
+            try {
+                const profile = await Parallel.getProfile();
+                console.log('📋 User Profile:', profile);
+                
+                if (profile.type === 'individual') {
+                    console.log('User Details:', {
+                        name: `${profile.profile.first_name} ${profile.profile.last_name}`,
+                        email: profile.profile.email,
+                        type: profile.type
+                    });
+                } else if (profile.type === 'business') {
+                    console.log('Business Details:', {
+                        name: profile.profile.name,
+                        type: profile.type
+                    });
+                }
+                
+                showStatus('Identity verified successfully! Check console for full details.', 'success');
+            } catch (err) {
+                console.log('Note: Could not retrieve profile. You may need proper authentication.', err);
+                showStatus('Identity submitted! Check console for authentication details.', 'success');
+            }
+            
+        }
+
+        // Handle errors
+        function handleError(error) {
+            showStatus('Error: ' + (error.message || 'An error occurred'), 'error');
+            console.error('❌ Parallel SDK Error:', error);
+        }
+
+
+
+        // Show status message
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = 'status ' + type;
+        }
+
+        // Log initial page load
+        console.log('🚀 iCapital Identity Integration Demo loaded');
+        console.log('Instructions:');
+        console.log('1. Enter your client_id and API key in the form above');
+        console.log('2. Click "Initialize SDK" to set up the integration');
+        console.log('3. Click the Parallel button to start the identity flow');
+        console.log('4. Complete the identity form in the overlay');
+        console.log('5. Check this console for the identity results');
+    </script>
+</body>
+</html>
