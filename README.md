@@ -2,78 +2,88 @@
 
 This repository contains my submission for the iCapital Identity Solutions Engineer challenge.
 
-## Contents
+## 📁 Deliverables
 
-1. **part_one_responses.md** - Email responses to customer inquiries (Part One)
-2. **index.html** - Parallel Markets SDK integration demo (Part Two)
-3. **README.md** - This file with setup and usage instructions
+### Part One - Email Responses
+- **File**: `part_one_responses.md`
+- **Content**: Professional responses to two customer technical support inquiries about Parallel Markets SDK integration issues
 
-## Part Two - Integration Demo
+### Part Two - Integration Demo
+- **File**: `index.html`
+- **Purpose**: Demonstrates Parallel Markets JavaScript SDK integration for identity collection
 
-### Features Implemented
+## 🚀 Quick Start - Local Deployment
 
-- ✅ HTML web page with Parallel SDK integration
-- ✅ Renders the Parallel button to initiate identity collection
-- ✅ Opens Parallel overlay when button is clicked
-- ✅ Prints identity results to developer console
-- ✅ Supports credential configuration (client_id and API key)
-- ✅ Includes manual login option with prefilled user data
-- ✅ Proper error handling and status messages
-- ✅ Clean, professional UI with clear instructions
+### Prerequisites
+- Modern web browser (Chrome, Firefox, Safari, or Edge)
+- Python 3 or Node.js (for local server)
+- Client ID from Parallel Markets dashboard (or use the pre-configured one)
 
-### Running the Integration Locally
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/isaacbuz/iCapital.git
+cd iCapital
+```
 
-1. **Simple HTTP Server (Python)**
-   ```bash
-   # Python 3
-   python3 -m http.server 8000
-   
-   # Python 2
-   python -m SimpleHTTPServer 8000
-   ```
-   Then open: http://localhost:8000
+### Step 2: Start a Local Web Server
 
-2. **Node.js HTTP Server**
-   ```bash
-   # Install http-server globally (one time)
-   npm install -g http-server
-   
-   # Run server
-   http-server -p 8000
-   ```
-   Then open: http://localhost:8000
+Choose one of these options:
 
-3. **Direct File Access**
-   - Simply open `index.html` directly in your browser
-   - Note: Some browsers may have CORS restrictions for local files
+**Option A - Python (Recommended)**
+```bash
+python3 -m http.server 8000
+```
 
-### Using the Integration
+**Option B - Node.js**
+```bash
+npx http-server -p 8000
+```
 
-1. **Enter Credentials**
-   - Input the client_id provided for the sandbox environment
-   - Enter the API key if you have one (optional for basic flow)
+**Option C - PHP**
+```bash
+php -S localhost:8000
+```
 
-2. **Initialize SDK**
-   - Click "Initialize SDK" button
+### Step 3: Open in Browser
+Navigate to: http://localhost:8000
+
+## 📋 How to Test the Integration
+
+1. **Initialize the SDK**
+   - The page loads with a pre-configured Client ID
+   - Click the "Initialize SDK" button
    - You should see a success message
 
-3. **Start Identity Flow**
-   - Click the Parallel button that appears
-   - Complete the identity form in the overlay
-   - Submit the information
+2. **Start Identity Verification**
+   - After initialization, a Parallel button appears
+   - Click the Parallel button to open the identity collection overlay
+   - Fill out the test form with any test data
 
-4. **View Results**
-   - Open browser Developer Console (F12)
-   - Identity results will be logged after successful submission
-   - The console will show the Parallel ID and any available profile data
+3. **View Results**
+   - Open your browser's Developer Console (F12 or Cmd+Option+I)
+   - Submit the form in the overlay
+   - The console will display:
+     - Authentication response parameters
+     - User profile information
+     - Parallel ID for the session
 
-### Technical Implementation Notes
+## 🔧 Technical Implementation
 
-- Uses Parallel SDK v2 with sandbox environment configuration
-- Implements proper error handling for SDK initialization and API calls
-- Includes both automatic button subscription and manual login methods
-- Attempts to fetch full identity details via API (may be limited by CORS in browser)
-- Provides clear console logging for debugging and result viewing
+### Features Implemented
+- ✅ Parallel Markets JavaScript SDK v2 integration
+- ✅ Renders the Parallel button for identity collection
+- ✅ Opens overlay flow when button is clicked
+- ✅ Logs complete identity results to developer console
+- ✅ Configured for sandbox environment (demo.parallelmarkets.com)
+- ✅ Error handling and status messages
+- ✅ Clean, professional UI
+
+### Configuration Details
+- **Environment**: Sandbox (`demo`)
+- **Client ID**: Pre-configured for testing
+- **Redirect URI**: `http://localhost:8000/`
+- **SDK Version**: v2
+- **Scopes**: `['profile', 'accreditation_status']`
 
 ### What I Would Add With More Time
 
@@ -100,16 +110,31 @@ This repository contains my submission for the iCapital Identity Solutions Engin
    - API documentation with examples
    - Video walkthrough of the integration
 
-## Time Spent
+## ⏱️ Time Spent
 
-Approximately 2 hours total:
+Approximately 2 hours:
 - 30 minutes: Research and documentation review
-- 30 minutes: Part One email responses
+- 30 minutes: Part One email responses  
 - 45 minutes: Part Two implementation
-- 15 minutes: Documentation and final review
+- 15 minutes: Documentation and testing
 
-## Contact
+## 📧 Submission Details
 
-For any questions about this submission, please contact me at [your email].
+**To**: dev-admin@parallelmarkets.com  
+**From**: Isaac Buziba (isaacbuz@gmail.com)  
+**Repository**: https://github.com/isaacbuz/iCapital
 
-Thank you for considering my application!
+### Submission Contents:
+1. Part One responses: See `part_one_responses.md`
+2. Part Two integration: See `index.html` 
+3. Git commit history: Available in repository
+4. Local deployment instructions: This README
+
+## Important Notes
+
+- The integration is configured to work with `http://localhost:8000/` as the redirect URI
+- The Client ID is pre-configured in the HTML for easy testing
+- All code follows the patterns shown in the official Parallel Markets SDK examples
+- The solution focuses on the core requirements without unnecessary complexity
+
+Thank you for considering my application for the Solutions Engineer role at iCapital!
