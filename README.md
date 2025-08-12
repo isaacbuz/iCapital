@@ -44,6 +44,10 @@ npx http-server -p 8000
 php -S localhost:8000
 ```
 
+**Note:** If you get "Address already in use" error, either:
+- Kill the existing process: `kill $(lsof -t -i:8000)`
+- Or use a different port: `python3 -m http.server 8001` and navigate to http://localhost:8001
+
 ### Step 3: Open in Browser
 Navigate to: http://localhost:8000
 
