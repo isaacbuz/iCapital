@@ -44,9 +44,9 @@ npx http-server -p 8000
 php -S localhost:8000
 ```
 
-**Note:** If you get "Address already in use" error, either:
+**Important:** If you get "Address already in use" error:
 - Kill the existing process: `kill $(lsof -t -i:8000)`
-- Or use a different port: `python3 -m http.server 8001` and navigate to http://localhost:8001
+- You MUST use port 8000 as the redirect URI is configured for `http://localhost:8000/` in the Parallel dashboard
 
 ### Step 3: Open in Browser
 Navigate to: http://localhost:8000
